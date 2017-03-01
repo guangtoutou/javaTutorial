@@ -14,7 +14,7 @@ public class SerializeDemo {
 		e.number = 101;
 
 		try {
-			FileOutputStream fileOut = new FileOutputStream("/tmp/employee.ser");
+			FileOutputStream fileOut = new FileOutputStream("/Users/niningning/Documents/workspace/javaTutorial/employee.ser");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(e);
 			out.close();
