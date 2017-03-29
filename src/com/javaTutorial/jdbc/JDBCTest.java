@@ -42,6 +42,41 @@ public class JDBCTest {
 				System.out.println("");
 			}
 			System.out.println("============================");
+
+			pstmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testInsert() {
+		String driver = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://localhost:3306/niningning?characterEncoding=utf8";
+		String username = "gordon";
+		String password = "password";
+		Connection conn = null;
+		try {
+			Class.forName(driver); // classLoader,加载对应驱动
+			conn = DriverManager.getConnection(url, username, password);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		String sql = "insert into distributor (distname, soldto, address) values ('上海', '102312', '武汉')";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.execute(sql);
+			System.out.println("============================");
+
+			System.out.println("============================");
+
+			pstmt.close();
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
