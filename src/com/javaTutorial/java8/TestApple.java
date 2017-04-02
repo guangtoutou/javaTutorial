@@ -29,8 +29,10 @@ public class TestApple {
 
 	@Test
 	public void testAppleComparator() {
-		
 		Collections.sort(inventory, new AppleComparator());
 		inventory.forEach(System.out::println);
 	}
+	
+
+	
 }
