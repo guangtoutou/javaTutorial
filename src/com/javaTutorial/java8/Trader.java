@@ -17,5 +17,10 @@ public class Trader {
 		this.name = name;
 		this.city = city;
 	}
+	
+	@Override
+	public String toString(){
+		return this.getName();
+	}
 
 }

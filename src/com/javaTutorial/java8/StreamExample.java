@@ -2,7 +2,10 @@ package com.javaTutorial.java8;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
@@ -20,6 +23,7 @@ public class StreamExample {
 	private Trader brian;
 
 	private List<Transaction> transactions;
+	private List<Trader> traders;
 
 	@Before
 	public void setUp() {
@@ -37,66 +41,72 @@ public class StreamExample {
 		mario = new Trader("Mario", "Milan");
 		alan = new Trader("Alan", "Cambridge");
 		brian = new Trader("Brian", "Cambridge");
+		traders = Arrays.asList(raoul, mario, alan, brian);
 
 		transactions = Arrays.asList(new Transaction(brian, 2011, 300), new Transaction(raoul, 2012, 1000),
 				new Transaction(raoul, 2011, 400), new Transaction(mario, 2012, 710), new Transaction(mario, 2012, 700),
 				new Transaction(alan, 2012, 950));
 	}
 
-	//1.Find all transactions in the year 2011 and sort them by value (small to high).
+	// 1. Find all transactions in the year 2011 and sort them by value (small
+	// to high).
 	@Test
 	public void practice1() {
-		List<Transaction> list = transactions.stream().filter(t -> t.getYear()==2011).sorted((t1,t2)->t1.getValue()-t2.getValue())
-				.collect(Collectors.toList());
+		List<Transaction> list = transactions.stream().filter(t -> t.getYear() == 2011)
+				.sorted(Comparator.comparing(Transaction::getValue)).collect(Collectors.toList());
 		System.out.println(list);
 	}
-	
-	//1.Find all transactions in the year 2011 and sort them by value (small to high).
+
+	// 2. What are all the unique cities where the traders work?
 	@Test
 	public void practice2() {
-		List<Transaction> list = transactions.stream().filter(t -> t.getYear()==2011).sorted((t1,t2)->t1.getValue()-t2.getValue())
-				.collect(Collectors.toList());
+		List<String> list = traders.stream().map(Trader::getCity).distinct().collect(Collectors.toList());
 		System.out.println(list);
 	}
-	
-	//1.Find all transactions in the year 2011 and sort them by value (small to high).
+
+	// 3. Find all traders from Cambridge and sort them by name.
 	@Test
 	public void practice3() {
-		List<Transaction> list = transactions.stream().filter(t -> t.getYear()==2011).sorted((t1,t2)->t1.getValue()-t2.getValue())
-				.collect(Collectors.toList());
+		List<Trader> list = traders.stream().filter(t -> t.getCity().equals("Cambridge"))
+				.sorted((t1, t2) -> t1.getName().compareTo(t2.getName())).collect(Collectors.toList());
 		System.out.println(list);
 	}
-	
-	//1.Find all transactions in the year 2011 and sort them by value (small to high).
+
+	// 4. Return a string of all traders’ names sorted alphabetically.
 	@Test
 	public void practice4() {
-		List<Transaction> list = transactions.stream().filter(t -> t.getYear()==2011).sorted((t1,t2)->t1.getValue()-t2.getValue())
-				.collect(Collectors.toList());
-		System.out.println(list);
+		String result = traders.stream().map(Trader::getName).distinct().sorted().reduce("", (a, b) -> a + b);
+		System.out.println(result);
 	}
-	
-	//1.Find all transactions in the year 2011 and sort them by value (small to high).
+
+	// 5. Are any traders based in Milan
 	@Test
 	public void practice5() {
-		List<Transaction> list = transactions.stream().filter(t -> t.getYear()==2011).sorted((t1,t2)->t1.getValue()-t2.getValue())
-				.collect(Collectors.toList());
-		System.out.println(list);
+		Boolean result = traders.stream().anyMatch(((t) -> t.getCity().equals("Milan")));
+		System.out.println(result);
+
 	}
-	
-	//1.Find all transactions in the year 2011 and sort them by value (small to high).
+
+	// 6. Print all transactions’ values from the traders living in Cambridge
 	@Test
 	public void practice6() {
-		List<Transaction> list = transactions.stream().filter(t -> t.getYear()==2011).sorted((t1,t2)->t1.getValue()-t2.getValue())
+		List<Transaction> list = transactions.stream().filter(t -> t.getTrader().getCity().equals("Cambridge"))
 				.collect(Collectors.toList());
 		System.out.println(list);
 	}
-	
-	//1.Find all transactions in the year 2011 and sort them by value (small to high).
+
+	// 7. What’s the highest value of all the transactions
 	@Test
 	public void practice7() {
-		List<Transaction> list = transactions.stream().filter(t -> t.getYear()==2011).sorted((t1,t2)->t1.getValue()-t2.getValue())
-				.collect(Collectors.toList());
-		System.out.println(list);
+		OptionalInt MaxValue = transactions.stream().mapToInt(Transaction::getValue).reduce(Integer::max);
+		System.out.println(MaxValue);
 	}
-	
+
+	// 8. Find the transaction with the smallest value
+	@Test
+	public void practice8() {
+		Optional<Transaction> transaction = transactions.stream().min(Comparator.comparing(Transaction::getValue));
+		System.out.println(transaction);
+	}
+
 }
